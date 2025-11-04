@@ -1,132 +1,186 @@
-import React, { useRef } from "react";
-import { assets } from "../assets/assets";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useAppContext } from "../context/AppContext";
 
 const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
+      staggerChildren: 0.15,
+      delayChildren: 0.4,
     },
   },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, x: -30 },
   show: {
     opacity: 1,
-    y: 0,
+    x: 0,
     transition: {
       type: "spring",
-      stiffness: 60,
-      damping: 12,
+      stiffness: 80,
+      damping: 15,
     },
   },
 };
 
 const Header = () => {
-  const { setInput, input } = useAppContext();
-  const inputRef = useRef();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const onsubmitHandler = async (e) => {
-    e.preventDefault();
-    setInput(inputRef.current.value);
-  };
+  const desktopImages = ["/desktop-1.jpg", "/desktop-2.jpg", "/desktop-3.jpg"];
+  const mobileImages = ["/mobile-1.jpg", "/mobile-2.jpg", "/mobile-3.jpg"];
 
-  const onClear = () => {
-    setInput("");
-    inputRef.current.value = "";
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % 3);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <motion.div
-      className="mx-4 sm:mx-8 lg:mx-16 xl:mx-24 relative overflow-hidden"
+      className="relative min-h-screen flex items-end overflow-hidden"
       variants={container}
       initial="hidden"
       animate="show"
     >
-      <div className="text-center mt-12 sm:mt-20 mb-8 relative z-10">
-        {/* Announcement Badge */}
-        <motion.div
-          variants={item}
-          className="inline-flex items-center justify-center gap-2 px-4 py-1 mb-4 border border-blue-400/30 bg-blue-500/10 rounded-full text-sm text-blue-600 backdrop-blur-sm"
-        >
-          <img src={assets.star_icon} alt="star icon" className="w-3 h-3" />
-          <p>New: AI Gemini Features Live</p>
-        </motion.div>
-
-        {/* Main Heading */}
-        <motion.h1
-          variants={item}
-          className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-gray-800"
-        >
-          Where <span className="text-blue-600">Pages</span> Unfold<br />
-          With <span className="text-blue-600">Purpose</span>
-        </motion.h1>
-
-        {/* Subheading */}
-        <motion.p
-          variants={item}
-          className="my-6 sm:my-8 max-w-2xl mx-auto text-gray-600 text-sm sm:text-base leading-relaxed"
-        >
-          Whether you're sharing a personal journey, a fresh perspective, or a step-by-step guide, 
-          Blogni is where your words find meaning. Start writing in minutes — and let your pages 
-          unfold with purpose.
-        </motion.p>
-
-        {/* Search Form */}
-        <motion.form
-          variants={item}
-          onSubmit={onsubmitHandler}
-          className="flex justify-between max-w-lg mx-auto bg-white rounded-full shadow-lg overflow-hidden border border-gray-200 hover:border-blue-300 transition-all duration-200"
-        >
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder="Search for blogs..."
-            className="w-full pl-6 pr-4 py-3 outline-none text-sm bg-transparent placeholder-gray-400"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 sm:px-8 py-3 m-1 rounded-full transition-all duration-300 ease-in-out cursor-pointer shadow-md hover:shadow-lg hover:from-blue-600 hover:to-blue-700 active:scale-95 flex items-center"
+      {/* Auto-scrolling Background */}
+      <div className="absolute inset-0">
+        {/* Desktop Images */}
+        {desktopImages.map((image, index) => (
+          <div
+            key={`desktop-${index}`}
+            className={`hidden lg:block absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ${
+              index === currentImageIndex 
+                ? 'opacity-100 scale-100' 
+                : 'opacity-0 scale-105'
+            }`}
+            style={{ backgroundImage: `url(${image})` }}
           >
-            <span className="hidden sm:inline">Search</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:ml-2 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-        </motion.form>
-
-        {/* Clear Button */}
-        {input && (
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-4"
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40"></div>
+          </div>
+        ))}
+        
+        {/* Mobile Images */}
+        {mobileImages.map((image, index) => (
+          <div
+            key={`mobile-${index}`}
+            className={`lg:hidden absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ${
+              index === currentImageIndex 
+                ? 'opacity-100 scale-100' 
+                : 'opacity-0 scale-105'
+            }`}
+            style={{ backgroundImage: `url(${image})` }}
           >
-            <button
-              onClick={onClear}
-              className="inline-flex items-center text-xs text-gray-500 hover:text-gray-700 transition-colors"
-            >
-              Clear search
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            <div className="absolute inset-0 bg-black/70"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/70"></div>
+          </div>
+        ))}
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-md lg:max-w-lg mb-12 lg:mb-16 ml-2.5"> 
+          
+          {/* Category & Meta - Smaller */}
+          <motion.div
+            variants={item}
+            className="flex items-center gap-4 mb-6"
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+              <span className="text-white font-medium tracking-wide text-sm">DESTINATION</span>
+            </div>
+            <div className="h-3 w-px bg-white/30"></div>
+            <div className="text-white/60 text-xs">TRAVEL GUIDE</div>
           </motion.div>
-        )}
+
+          {/* Main Content - Smaller */}
+          <motion.div variants={item} className="mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-white leading-tight mb-4">
+              Exploring The{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-orange-200 inline-block">
+                Wonders
+              </span>{" "}
+              Of Hiking
+            </h1>
+          </motion.div>
+
+          <motion.div variants={item} className="mb-6">
+            <p className="text-base text-white/80 leading-relaxed max-w-md font-light">
+              An iconic landmarks, this post unveils the secrets that make this destination 
+              a traveler's paradise. Discover hidden trails and breathtaking views.
+            </p>
+          </motion.div>
+
+          {/* Image Navigation - Smaller */}
+          <motion.div
+            variants={item}
+            className="flex items-center gap-3 mt-8"
+          >
+            <span className="text-white/60 text-xs">Explore more:</span>
+            <div className="flex gap-1">
+              {[0, 1, 2].map((index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-6 h-1 rounded-full transition-all duration-300 ${
+                    index === currentImageIndex 
+                      ? 'bg-white' 
+                      : 'bg-white/30 hover:bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          </motion.div>
+
+        </div>
       </div>
 
-      {/* Background Elements */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-0 left-0 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
+      {/* Author Section - Bottom Right Corner */}
+      <motion.div
+        variants={item}
+        className="absolute right-6 bottom-6 lg:right-10 lg:bottom-10"
+      >
+        <div className="flex items-center gap-3 bg-black/30 backdrop-blur-sm rounded-xl p-3 border border-white/20">
+          <div className="w-10 h-10 rounded-full border border-white/40 overflow-hidden">
+            <img 
+              src="/author.jpg" 
+              alt="Theodore Reginald" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <div className="text-white font-medium text-sm">Sahil</div>
+            <div className="text-white/60 text-xs">New Article • just now</div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Scroll Indicator - Smaller */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+        className="absolute bottom-6 left-1/2 transform -translate-x-1/2"
+      >
+        <div className="flex flex-col items-center text-white/60">
+          <span className="text-xs mb-2 tracking-wide">SCROLL</span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-4 h-6 border border-white/40 rounded-full flex justify-center"
+          >
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="w-1 h-1 bg-white/60 rounded-full mt-1"
+            />
+          </motion.div>
+        </div>
+      </motion.div>
     </motion.div>
   );
 };
