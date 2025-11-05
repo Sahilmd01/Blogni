@@ -1,94 +1,229 @@
-import React from 'react'
-import { assets, footer_data } from '../assets/assets'
-import { FaTwitter, FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa'
-import { RiMediumFill } from 'react-icons/ri'
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FaTwitter, FaLinkedin, FaGithub, FaInstagram, FaEnvelope, FaHeart, FaArrowUp } from 'react-icons/fa';
 
 const Footer = () => {
-  const socialIcons = [
-    { icon: <FaTwitter className="text-xl" />, name: 'Twitter', color: 'hover:text-blue-400' },
-    { icon: <FaFacebookF className="text-xl" />, name: 'Facebook', color: 'hover:text-blue-600' },
-    { icon: <FaInstagram className="text-xl" />, name: 'Instagram', color: 'hover:text-pink-600' },
-    { icon: <FaLinkedinIn className="text-xl" />, name: 'LinkedIn', color: 'hover:text-blue-700' },
-    { icon: <FaYoutube className="text-xl" />, name: 'YouTube', color: 'hover:text-red-600' },
-    { icon: <RiMediumFill className="text-xl" />, name: 'Medium', color: 'hover:text-gray-800' }
-  ]
+  const currentYear = new Date().getFullYear();
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const socialLinks = [
+    { icon: <FaTwitter className="w-4 h-4" />, url: '#', name: 'Twitter' },
+    { icon: <FaLinkedin className="w-4 h-4" />, url: '#', name: 'LinkedIn' },
+    { icon: <FaGithub className="w-4 h-4" />, url: '#', name: 'GitHub' },
+    { icon: <FaInstagram className="w-4 h-4" />, url: '#', name: 'Instagram' },
+    { icon: <FaEnvelope className="w-4 h-4" />, url: '#', name: 'Email' }
+  ];
+
+  const quickLinks = [
+    { name: 'Home', url: '/' },
+    { name: 'Blogs', url: '/blogs' },
+    { name: 'About', url: '/about' },
+    { name: 'Contact', url: '/contact' }
+  ];
+
+  const categories = [
+    { name: 'Technology', url: '/category/technology' },
+    { name: 'Programming', url: '/category/programming' },
+    { name: 'Lifestyle', url: '/category/lifestyle' },
+    { name: 'Productivity', url: '/category/productivity' }
+  ];
+
+  const neumorphicStyle = (size = 15) => ({
+    boxShadow: `${size}px ${size}px ${size * 2}px #d1d1d1, -${size}px -${size}px ${size * 2}px #ffffff`
+  });
 
   return (
-    <footer className='bg-gradient-to-b from-white to-gray-50 relative z-10 border-t border-gray-100'>
-      <div className='px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 py-8 sm:py-12'>
-        <div className='rounded-xl bg-white p-6 sm:p-8 md:p-10 lg:p-12 shadow-lg border border-gray-100'>
-          <div className='flex flex-col lg:flex-row items-start justify-between gap-8 sm:gap-10 lg:gap-12 pb-8 sm:pb-10'>
-            {/* Brand Section */}
-            <div className='w-full lg:max-w-md'>
-              <div className='flex items-center gap-2 sm:gap-3'>
-                <img 
-                  src={assets.logo} 
-                  alt="Blogni logo" 
-                  className='w-28 sm:w-32 md:w-36 transition-transform hover:scale-105' 
-                />
-                <span className='text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent'>
-                  Blogni
-                </span>
+    <footer className="bg-gray-50 border-t-2 border-gray-200">
+      {/* Main Footer Content */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          
+          {/* Brand Section */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="lg:col-span-1"
+          >
+            <div className="bg-gray-50 rounded-2xl p-6 border-2 border-gray-200 h-full" style={neumorphicStyle(8)}>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center font-black text-white text-lg" 
+                  style={{...neumorphicStyle(4), boxShadow: `${neumorphicStyle(4).boxShadow}, inset 2px 2px 4px rgba(255,255,255,0.3)`}}>
+                  B
+                </div>
+                <h3 className="text-2xl font-black text-gray-800">Blogni</h3>
               </div>
-              <p className='mt-4 sm:mt-5 md:mt-6 text-gray-600 text-sm sm:text-base leading-relaxed'>
-                Blogni is where your words belong. From everyday thoughts to expert insights, we make it simple to write, publish, and connect — all in one clean, welcoming platform.
+              <p className="text-gray-600 leading-relaxed mb-6 text-sm">
+                Sharing thoughts, ideas, and experiences through words. Join me on this journey of learning and growth.
               </p>
               
-              {/* Social Icons */}
-              <div className='flex gap-3 sm:gap-4 mt-4 sm:mt-5 md:mt-6 flex-wrap'>
-                {socialIcons.map((social, index) => (
-                  <a 
-                    key={index}
-                    href="#"
-                    className={`w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-colors ${social.color}`}
-                    aria-label={`Follow us on ${social.name}`}
+              {/* Social Links */}
+              <div className="flex gap-3">
+                {socialLinks.map((social, index) => (
+                  <motion.a
+                    key={social.name}
+                    href={social.url}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gray-200 bg-gray-50 hover:border-blue-400 hover:text-blue-600 transition-all duration-300"
+                    style={neumorphicStyle(4)}
                   >
                     {social.icon}
-                  </a>
+                  </motion.a>
                 ))}
               </div>
             </div>
+          </motion.div>
 
-            {/* Links Section */}
-            <div className='grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-8 w-full lg:w-auto'>
-              {footer_data.map((section, index) => (
-                <div key={index} className='min-w-[120px] sm:min-w-[150px]'>
-                  <h3 className='font-semibold text-base sm:text-lg text-gray-900 mb-3 sm:mb-4'>{section.title}</h3>
-                  <ul className='space-y-2 sm:space-y-3'>
-                    {section.links.map((link, i) => (
-                      <li key={i}>
-                        <a
-                          href="#"
-                          className='text-gray-600 text-sm sm:text-base hover:text-purple-600 transition-colors flex items-start gap-2'
-                          aria-label={link}
-                        >
-                          <span className='mt-1.5 sm:mt-1 w-1 h-1 rounded-full bg-gray-400'></span>
-                          {link}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+          {/* Quick Links */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <div className="bg-gray-50 rounded-2xl p-6 border-2 border-gray-200 h-full" style={neumorphicStyle(8)}>
+              <h4 className="font-black text-gray-800 text-lg mb-6 flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                Quick Links
+              </h4>
+              <ul className="space-y-3">
+                {quickLinks.map((link) => (
+                  <li key={link.name}>
+                    <motion.a
+                      href={link.url}
+                      whileHover={{ x: 5 }}
+                      className="text-gray-600 hover:text-blue-600 transition-colors duration-300 flex items-center gap-2 group"
+                    >
+                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full group-hover:bg-blue-500 transition-colors"></div>
+                      {link.name}
+                    </motion.a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+
+          {/* Categories */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="bg-gray-50 rounded-2xl p-6 border-2 border-gray-200 h-full" style={neumorphicStyle(8)}>
+              <h4 className="font-black text-gray-800 text-lg mb-6 flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                Categories
+              </h4>
+              <ul className="space-y-3">
+                {categories.map((category) => (
+                  <li key={category.name}>
+                    <motion.a
+                      href={category.url}
+                      whileHover={{ x: 5 }}
+                      className="text-gray-600 hover:text-purple-600 transition-colors duration-300 flex items-center gap-2 group"
+                    >
+                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full group-hover:bg-purple-500 transition-colors"></div>
+                      {category.name}
+                    </motion.a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+
+          {/* Newsletter */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <div className="bg-gray-50 rounded-2xl p-6 border-2 border-gray-200 h-full" style={neumorphicStyle(8)}>
+              <h4 className="font-black text-gray-800 text-lg mb-6 flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                Stay Updated
+              </h4>
+              <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                Get the latest posts delivered straight to your inbox.
+              </p>
+              
+              <form className="space-y-3">
+                <div>
+                  <input 
+                    type="email" 
+                    placeholder="Your email address"
+                    className="w-full p-3 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-400 bg-white text-sm font-medium"
+                    style={{boxShadow: "inset 4px 4px 8px #d1d1d1, inset -4px -4px 8px #ffffff"}}
+                    required
+                  />
                 </div>
-              ))}
+                
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full py-3 bg-gray-50 text-gray-700 font-bold rounded-xl border-2 border-gray-200 hover:border-green-400 hover:text-green-600 transition-all duration-300 text-sm"
+                  style={neumorphicStyle(4)}
+                >
+                  Subscribe
+                </motion.button>
+              </form>
             </div>
+          </motion.div>
+        </div>
+
+        {/* Bottom Bar */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t-2 border-gray-200"
+        >
+          {/* Copyright */}
+          <div className="flex items-center gap-2 text-gray-600 text-sm">
+            <span>© {currentYear} Blogni. Made with</span>
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
+            >
+              <FaHeart className="text-red-500 w-3 h-3" />
+            </motion.div>
+            <span>by Sahil MD</span>
           </div>
 
-          {/* Bottom Section */}
-          <div className='pt-6 sm:pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4'>
-            <p className='text-gray-500 text-xs sm:text-sm text-center md:text-left'>
-              Copyright &copy; 2025 Blogni | All Rights Reserved.
-            </p>
-            
-            <div className='flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6'>
-              <a href="#" className='text-gray-500 hover:text-gray-700 text-xs sm:text-sm'>Privacy Policy</a>
-              <a href="#" className='text-gray-500 hover:text-gray-700 text-xs sm:text-sm'>Terms of Service</a>
-              <a href="#" className='text-gray-500 hover:text-gray-700 text-xs sm:text-sm'>Cookie Policy</a>
-            </div>
+          {/* Additional Links */}
+          <div className="flex items-center gap-6 text-sm">
+            <motion.a 
+              href="/privacy" 
+              whileHover={{ scale: 1.05 }}
+              className="text-gray-600 hover:text-blue-600 transition-colors"
+            >
+              Privacy
+            </motion.a>
+            <motion.a 
+              href="/terms" 
+              whileHover={{ scale: 1.05 }}
+              className="text-gray-600 hover:text-blue-600 transition-colors"
+            >
+              Terms
+            </motion.a>
+            <motion.button
+              onClick={scrollToTop}
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.9 }}
+              className="w-8 h-8 rounded-xl flex items-center justify-center border-2 border-gray-200 bg-gray-50 hover:border-blue-400 hover:text-blue-600 transition-all"
+              style={neumorphicStyle(3)}
+              aria-label="Scroll to top"
+            >
+              <FaArrowUp className="w-3 h-3" />
+            </motion.button>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
