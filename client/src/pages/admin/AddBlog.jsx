@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { assets, blogCategories } from '../../assets/assets';
+import { assets } from '../../assets/assets';
 import Quill from 'quill';
 import { useAppContext } from '../../context/AppContext';
 import toast from 'react-hot-toast';
@@ -16,8 +16,11 @@ const AddBlog = () => {
   const [image, setImage] = useState(false);
   const [title, setTitle] = useState('');
   const [subTitle, setSubTitle] = useState('');
-  const [category, setCategory] = useState('Startup');
+  const [category, setCategory] = useState('Technology');
   const [isPublished, setIsPublished] = useState(false);
+
+  // Same categories as in BlogList (without "All")
+  const blogCategories = ["Technology", "Startup", "Lifestyle", "Finance", "Travel", "Food", "Fashion"];
 
   const generateContent = async () => {
     if (!title) return toast.error('Please enter a title');
@@ -61,7 +64,7 @@ const AddBlog = () => {
         setTitle('');
         setSubTitle('');
         quillRef.current.root.innerHTML = '';
-        setCategory('Startup');
+        setCategory('Technology');
       } else {
         toast.error(data.message);
       }
