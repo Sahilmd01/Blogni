@@ -10,7 +10,9 @@ const Home = () => {
     <>
        <Navbar/>
        <Header/>
-       <BlogList/>
+       <div id="blog-list-section">
+         <BlogList/>
+       </div>
        <NewsLetter/>
        <Footer/>
     </>
