@@ -2,17 +2,60 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { FaArrowRight, FaBook, FaEye, FaTags, FaChartLine } from 'react-icons/fa'
 
+// Helper function to generate neumorphism styles
+const neumorphicStyle = (size = 15) => ({
+  boxShadow: `${size}px ${size}px ${size * 2}px #d1d1d1, -${size}px -${size}px ${size * 2}px #ffffff`,
+})
+
+const FeatureCard = ({ feature, onClick, isActive }) => (
+  <div className="space-y-4 sm:space-y-6">
+    <div className="flex items-center gap-3 sm:gap-4">
+      <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white flex items-center justify-center flex-shrink-0" style={neumorphicStyle(6)}>
+        {feature.icon}
+      </div>
+      <div className="min-w-0">
+        <h3 className="text-xl sm:text-2xl font-black text-gray-800 mb-1 sm:mb-2 leading-tight">
+          {feature.title}
+        </h3>
+        <p className="text-gray-600 text-sm sm:text-base">{feature.description}</p>
+      </div>
+    </div>
+    <div className="flex gap-2 justify-center">
+      {features.map((_, index) => (
+        <button
+          key={index}
+          onClick={() => onClick(index)}
+          className={`w-6 h-1 sm:w-8 sm:h-2 rounded-full transition-all ${index === isActive ? 'bg-gray-700' : 'bg-gray-300'}`}
+        />
+      ))}
+    </div>
+  </div>
+)
+
+const StatCard = ({ stat }) => (
+  <div className="p-3 sm:p-4 bg-white rounded-2xl text-center" style={neumorphicStyle(6)}>
+    <div className="flex items-center justify-center gap-1 sm:gap-2 mb-1 sm:mb-2">
+      {stat.icon}
+      <div className="text-base sm:text-lg font-black text-gray-800">{stat.number}</div>
+    </div>
+    <div className="text-xs text-gray-600">{stat.label}</div>
+  </div>
+)
+
 const HeroSection = () => {
   const [currentFeature, setCurrentFeature] = useState(0)
-
-  const neumorphicStyle = (size = 15) => ({
-    boxShadow: `${size}px ${size}px ${size * 2}px #d1d1d1, -${size}px -${size}px ${size * 2}px #ffffff`
-  })
 
   const features = [
     { icon: <FaBook className="w-6 h-6" />, title: "In-Depth Analysis", description: "Comprehensive articles breaking down complex topics" },
     { icon: <FaChartLine className="w-6 h-6" />, title: "Trending Insights", description: "Stay updated with latest tech and innovation" },
     { icon: <FaTags className="w-6 h-6" />, title: "Expert Perspectives", description: "Unique viewpoints from years of experience" }
+  ]
+
+  const stats = [
+    { number: "67+", label: "Articles", icon: <FaBook className="w-3 h-3 sm:w-4 sm:h-4" /> },
+    { number: "12K+", label: "Readers", icon: <FaEye className="w-3 h-3 sm:w-4 sm:h-4" /> },
+    { number: "28+", label: "Categories", icon: <FaTags className="w-3 h-3 sm:w-4 sm:h-4" /> },
+    { number: "96%", label: "Engagement", icon: <FaChartLine className="w-3 h-3 sm:w-4 sm:h-4" /> }
   ]
 
   const scrollToBlogList = () => {
@@ -37,38 +80,24 @@ const HeroSection = () => {
             animate={{ opacity: 1, x: 0 }}
             className="space-y-6 lg:space-y-8 order-2 lg:order-1"
           >
-            <motion.h1
-              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-gray-800 leading-tight"
-            >
-              Exploring{' '}
-              <span className="text-blue-600">Technology</span>
-              <br />
-              &{' '}
+            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-gray-800 leading-tight">
+              Exploring <span className="text-blue-600">Technology</span> &{' '}
               <span className="text-purple-600">Innovation</span>
             </motion.h1>
-
-            <motion.p
-              className="text-lg sm:text-xl text-gray-600 leading-relaxed"
-            >
+            <motion.p className="text-lg sm:text-xl text-gray-600 leading-relaxed">
               Deep dives into web development, startup strategies, and the future of technology.
             </motion.p>
 
             {/* Author Info */}
-            <motion.div
-              className="flex items-center gap-4 p-4 bg-white rounded-2xl w-full max-w-md"
-              style={neumorphicStyle(8)}
-            >
-              <img
-                src="/profile-pic.jpg"
-                alt="Author"
-                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-gray-200"
-              />
+            <motion.div className="flex items-center gap-4 p-4 bg-white rounded-2xl w-full max-w-md" style={neumorphicStyle(8)}>
+              <img src="/profile-pic.jpg" alt="Author" className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-gray-200" />
               <div className="flex-1 min-w-0">
                 <h3 className="font-bold text-gray-800 text-sm sm:text-base">Sahil MD</h3>
                 <p className="text-gray-600 text-xs sm:text-sm truncate">Developer & Tech Writer</p>
               </div>
             </motion.div>
 
+            {/* Button to Explore Articles */}
             <motion.button
               onClick={scrollToBlogList}
               whileHover={{ scale: 1.05 }}
@@ -81,19 +110,8 @@ const HeroSection = () => {
 
             {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-2xl">
-              {[
-                { number: "67+", label: "Articles", icon: <FaBook className="w-3 h-3 sm:w-4 sm:h-4" /> },
-                { number: "12K+", label: "Readers", icon: <FaEye className="w-3 h-3 sm:w-4 sm:h-4" /> },
-                { number: "28+", label: "Categories", icon: <FaTags className="w-3 h-3 sm:w-4 sm:h-4" /> },
-                { number: "96%", label: "Engagement", icon: <FaChartLine className="w-3 h-3 sm:w-4 sm:h-4" /> }
-              ].map((stat) => (
-                <div key={stat.label} className="p-3 sm:p-4 bg-white rounded-2xl text-center" style={neumorphicStyle(6)}>
-                  <div className="flex items-center justify-center gap-1 sm:gap-2 mb-1 sm:mb-2">
-                    {stat.icon}
-                    <div className="text-base sm:text-lg font-black text-gray-800">{stat.number}</div>
-                  </div>
-                  <div className="text-xs text-gray-600">{stat.label}</div>
-                </div>
+              {stats.map((stat) => (
+                <StatCard key={stat.label} stat={stat} />
               ))}
             </div>
           </motion.div>
@@ -105,10 +123,7 @@ const HeroSection = () => {
             className="space-y-6 flex flex-col items-center order-1 lg:order-2"
           >
             <div className="flex justify-center items-center gap-3 sm:gap-4 w-full overflow-x-auto no-scrollbar pb-2">
-              {[
-                "/hero-video.mp4",
-                "/hero-video2.mp4"
-              ].map((videoSrc, index) => (
+              {["/hero-video.mp4", "/hero-video2.mp4"].map((videoSrc, index) => (
                 <motion.div
                   key={index}
                   className="bg-white rounded-3xl flex justify-center items-center flex-shrink-0"
